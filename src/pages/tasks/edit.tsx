@@ -2,7 +2,7 @@ import { Box, TextField } from "@mui/material";
 import { Edit } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 
-export const CategoryEdit = () => {
+export const TaskEdit = () => {
   const {
     saveButtonProps,
     register,

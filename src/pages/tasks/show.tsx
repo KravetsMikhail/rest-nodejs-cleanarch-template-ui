@@ -2,7 +2,7 @@ import { Stack, Typography } from "@mui/material";
 import { useShow } from "@refinedev/core";
 import { Show, TextFieldComponent as TextField } from "@refinedev/mui";
 
-export const CategoryShow = () => {
+export const TaskShow = () => {
   const { query } = useShow({});
   const { data, isLoading } = query;
 
@@ -16,9 +16,9 @@ export const CategoryShow = () => {
         </Typography>
         <TextField value={record?.id} />
         <Typography variant="body1" fontWeight="bold">
-          {"Title"}
+          {"Name"}
         </Typography>
-        <TextField value={record?.title} />
+        <TextField value={record?.name} />
       </Stack>
     </Show>
   );

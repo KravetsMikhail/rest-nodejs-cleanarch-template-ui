@@ -40,7 +40,7 @@
     "vite": "^6.2.6"
   },
   "scripts": {
-    "dev": "refine dev",
+    "dev": "refine dev --port 5173",
     "build": "tsc && refine build",
     "start": "refine start",
     "refine": "refine"
