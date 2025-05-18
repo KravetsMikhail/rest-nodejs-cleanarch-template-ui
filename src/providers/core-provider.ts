@@ -8,7 +8,6 @@ import {
 } from "@refinedev/core";
 import { stringify } from "query-string";
 import axios, { AxiosInstance } from "axios";
-import { KeycloakInstance } from "keycloak-js";
 
 type MethodTypes = "get" | "delete" | "head" | "options";
 type MethodTypesWithBody = "post" | "put" | "patch";

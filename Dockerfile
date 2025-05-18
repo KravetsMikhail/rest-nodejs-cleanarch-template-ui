@@ -14,7 +14,7 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-FROM base as builder
+FROM base AS builder
 
 ENV NODE_ENV production
 
@@ -24,7 +24,7 @@ COPY . .
 
 RUN npm run build
 
-FROM base as runner
+FROM base AS runner
 
 ENV NODE_ENV production
 
