@@ -1,0 +1,26 @@
+services:
+  ui:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: local/restapi_sevice_ui:ui-000
+    container_name: restapi-service-test-ui
+    restart: always
+    environment:
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env.production.local
+    networks:
+      - server_app_network
+      - keycloak_app_network
+
+networks:
+  server_app_network:
+    name: rest-nodejs-cleanarch-template_server_app_network
+    external: true
+  keycloak_app_network:
+    name: rest-nodejs-cleanarch-template-auth_default
+    external: true
+  

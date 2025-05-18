@@ -43,6 +43,7 @@
     "dev": "refine dev --port 5173",
     "build": "tsc && refine build",
     "start": "refine start",
+    "serve": "node dist/index.html",
     "refine": "refine"
   },
   "browserslist": {
