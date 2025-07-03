@@ -34,7 +34,7 @@ export const coreDataProvider = (
 
 	update: async ({ resource, id, variables, meta }) => {
 
-		throw new Error("Not implemented");
+		//throw new Error("Not implemented");
 
 		const url = `${apiUrl}/${resource}/${id}`;
 
@@ -52,7 +52,7 @@ export const coreDataProvider = (
 
 	create: async ({ resource, variables, meta }) => {
 
-		throw new Error("Not implemented");
+		//throw new Error("Not implemented");
 
 		const url = `${apiUrl}/${resource}`;
 
@@ -70,7 +70,7 @@ export const coreDataProvider = (
 
 	deleteOne: async ({ resource, id, variables, meta }) => {
 
-		throw new Error("Not implemented");
+		//throw new Error("Not implemented");
 
 		const url = `${apiUrl}/${resource}/${id}`;
 
