@@ -17,17 +17,17 @@ export const TaskEdit = () => {
         autoComplete="off"
       >
         <TextField
-          {...register("title", {
+          {...register("name", {
             required: "This field is required",
           })}
-          error={!!(errors as any)?.title}
-          helperText={(errors as any)?.title?.message}
+          error={!!(errors as any)?.name}
+          helperText={(errors as any)?.name?.message}
           margin="normal"
           fullWidth
           InputLabelProps={{ shrink: true }}
           type="text"
-          label={"Title"}
-          name="title"
+          label={"Name"}
+          name="name"
         />
       </Box>
     </Edit>
