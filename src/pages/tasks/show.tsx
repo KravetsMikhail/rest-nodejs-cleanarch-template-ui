@@ -11,14 +11,14 @@ export const TaskShow = () => {
   return (
     <Show isLoading={isLoading}>
       <Stack gap={1}>
-        <Typography variant="body1" fontWeight="bold">
+        <Typography variant="body1" color="gray">
           {"ID"}
         </Typography>
-        <TextField value={record?.id} />
-        <Typography variant="body1" fontWeight="bold">
+        <TextField value={record?.id} fontWeight="bold"/>
+        <Typography variant="body1" color="gray">
           {"Name"}
         </Typography>
-        <TextField value={record?.name} />
+        <TextField value={record?.name} fontWeight="bold"/>
       </Stack>
     </Show>
   );
