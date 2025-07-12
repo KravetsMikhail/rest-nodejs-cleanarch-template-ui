@@ -1,4 +1,4 @@
-# rest-nodejs-cleanarch-template-ui [[English version]](https://github.com/KravetsMikhail/rest-nodejs-cleanarch-template-ui/blob/main/README-en.md)
+# rest-nodejs-cleanarch-template-ui [[English version]](https://github.com/KravetsMikhail/rest-nodejs-cleanarch-template-ui/blob/main/README-en.MD)
 
 Фронтенд UI на React движке [Refine](https://github.com/refinedev/refine) к шаблону [REST API серверу](https://github.com/KravetsMikhail/rest-nodejs-cleanarch-template) на чистой архитектуре
 

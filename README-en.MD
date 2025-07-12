@@ -6,3 +6,62 @@ REST API server template on component-based pure architecture
 
 ## Project Description
 
+The project is a frontend to the service's REST API template based on a pure architecture.
+
+The project must be run jointly and after:
+
+1. Server Template https://github.com/KravetsMikhail/rest-nodejs-cleanarch-template
+
+2. Authentication Server https://github.com/KravetsMikhail/rest-nodejs-cleanarch-template-auth
+
+The project uses: [REACT](https://github.com/facebook/react ), [Refine](https://github.com/refinedev/refine ), [Vite](https://github.com/vitejs/vite ), [Keycloak](https://github.com/keycloak/keycloak )
+
+## LAUNCH
+
+### In the docker
+
+We are taking the latest version
+
+```bash
+    sudo git pull
+```
+
+#### Launching docker
+
+Linux
+
+```bash
+    sudo bash service_up.sh
+```
+
+Windows (in Git bash)
+
+```bash
+    bash service_up.sh
+```
+
+#### Stopping the docker
+
+Linux
+
+```bash
+    sudo bash service_down.sh
+```
+
+Windows (in Git bash)
+
+```bash
+    bash service_down.sh
+```
+
+### Building a project
+
+```bash
+    npm run build
+```
+
+### Running debug
+
+```bash
+    npm run dev
+```
