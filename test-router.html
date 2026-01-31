@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Router Test</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script>
+        console.log('Current URL:', window.location.pathname);
+        
+        // Test if browser can handle the URL
+        if (window.location.pathname.includes('/tasks/show/')) {
+            document.getElementById('app').innerHTML = '<h1>Route matched: ' + window.location.pathname + '</h1>';
+        } else {
+            document.getElementById('app').innerHTML = '<h1>Route not matched. Current: ' + window.location.pathname + '</h1>';
+        }
+    </script>
+</body>
+</html>
