@@ -29,20 +29,34 @@ export const authProvider = (keycloak: any ): AuthProvider => ({
       }
     },
     onError: async (error) => {
-      console.error(error);
+      console.error('Auth onError:', error);
+      
+      // Не редиректить при ошибках API, только при ошибках аутентификации
+      if (error?.message?.includes('401') || error?.message?.includes('403')) {
+        return {
+          logout: true,
+          redirectTo: "/login",
+          error,
+        };
+      }
+      
       return { error };
     },
     check: async () => {
       try {
+        console.log('Auth check - keycloak:', keycloak);
+        console.log('Auth check - token:', keycloak?.token);
         const { token } = keycloak;
         if (token) {
           axios.defaults.headers.common = {
             Authorization: `Bearer ${token}`,
           };
+          console.log('Auth check - success');
           return {
             authenticated: true,
           };
         } else {
+          console.log('Auth check - no token');
           return {
             authenticated: false,
             logout: true,
@@ -54,6 +68,7 @@ export const authProvider = (keycloak: any ): AuthProvider => ({
           };
         }
       } catch (error) {
+        console.log('Auth check - error:', error);
         return {
           authenticated: false,
           logout: true,

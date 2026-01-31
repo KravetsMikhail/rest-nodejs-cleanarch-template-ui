@@ -223,7 +223,7 @@ const generateSort = (sorters?: CrudSorting) => {
 // generate query string from Refine Pagination to the format that API accepts.
 const generatePagination = (pagination?: Pagination) => {
 	// pagination is optional on data hooks, so we need to set default values.
-	const { current = 1, pageSize = 10, mode = "server" } = pagination ?? {};
+	const { current = 1, pageSize = 10, mode = "server" } = (pagination as any) ?? {};
 
 	const query: {
 		offset?: number;

@@ -1,6 +1,5 @@
 import {
 	Authenticated,
-	GitHubBanner,
 	Refine,
 	HttpError
 } from "@refinedev/core";
@@ -10,7 +9,7 @@ import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 import {
 	ErrorComponent,
 	RefineSnackbarProvider,
-	ThemedLayoutV2,
+	ThemedLayout,
 	useNotificationProvider,
 } from "@refinedev/mui";
 
@@ -25,7 +24,7 @@ import routerBindings, {
 } from "@refinedev/react-router";
 import { coreDataProvider } from "./providers/core-provider";
 import axios from "axios";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router";
+import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router";
 import { AppIcon } from "./components/app-icon";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
@@ -38,10 +37,16 @@ import {
 import { Login } from "./pages/login";
 import { authProvider } from "./providers/auth-provider";
 
-function App() {
+function AppContent() {
 	const { keycloak, initialized } = useKeycloak();
+	const location = useLocation();
+
+	console.log('App - keycloak:', keycloak);
+	console.log('App - initialized:', initialized);
+	console.log('App - location:', location.pathname);
 
 	if (!initialized) {
+		console.log('App - loading...');
 		return <div>Loading...</div>;
 	}
 
@@ -56,14 +61,12 @@ function App() {
 
  	// Convert axios errors to HttpError on every response.
 	axiosInstance.interceptors.response.use(
-		(response) => {
-			return response;
-		},
+		(response) => response,
 		(error) => {
-			const customError: HttpError = {
+			const customError = {
 				...error,
-				message: error.response?.data?.message,
-				statusCode: error.response?.status,
+				message: error.response?.data?.message || error.message,
+				statusCode: error.response?.status || null,
 			};
 
 			return Promise.reject(customError);
@@ -76,88 +79,76 @@ function App() {
 	);
 
 	return (
-		<BrowserRouter>
-			<GitHubBanner />
-			<RefineKbarProvider>
-				<ColorModeContextProvider>
-					<CssBaseline />
-					<GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
-					<RefineSnackbarProvider>
-						<DevtoolsProvider>
-							<Refine
-								dataProvider={{
-									default: dataProvider,
-								}}
-								notificationProvider={useNotificationProvider}
-								authProvider={authProvider(keycloak)}
-								routerProvider={routerBindings}
-								resources={[
-									{
-										name: "tasks",
-										list: "/tasks",
-										create: "/tasks/create",
-										edit: "/tasks/edit/:id",
-										show: "/tasks/show/:id",
-										meta: {
-											canDelete: true,
-										},
+		<RefineKbarProvider>
+			<ColorModeContextProvider>
+				<CssBaseline />
+				<GlobalStyles styles={{ html: { WebkitFontSmoothing: "auto" } }} />
+				<RefineSnackbarProvider>
+					<DevtoolsProvider>
+						<Refine
+							dataProvider={{
+								default: dataProvider,
+							}}
+							notificationProvider={useNotificationProvider}
+							authProvider={authProvider(keycloak)}
+							routerProvider={routerBindings}
+							resources={[
+								{
+									name: "tasks",
+									list: "/tasks",
+									create: "/tasks/create",
+									edit: "/tasks/edit/:id",
+									show: "/tasks/show/:id",
+									meta: {
+										canDelete: true,
 									},
-								]}
-								options={{
-									syncWithLocation: true,
-									warnWhenUnsavedChanges: true,
-									useNewQueryKeys: true,
-									projectId: "6mdJ1i-c37dju-qI5aFP",
-									title: { text: "Refine Project", icon: <AppIcon /> },
-								}}
-							>
-								<Routes>
-									<Route
-										element={
-											<Authenticated
-												key="authenticated-inner"
-												fallback={<CatchAllNavigate to="/login" />}
-											>
-												<ThemedLayoutV2 Header={Header}>
-													<Outlet />
-												</ThemedLayoutV2>
-											</Authenticated>
-										}
-									>
-										<Route
-											index
-											element={<NavigateToResource resource="tasks" />}
-										/>
-										<Route path="/tasks">
-											<Route index element={<TaskList />} />
-											<Route path="create" element={<TaskCreate />} />
-											<Route path="edit/:id" element={<TaskEdit />} />
-											<Route path="show/:id" element={<TaskShow />} />
-										</Route>
-										<Route path="*" element={<ErrorComponent />} />
-									</Route>
-									<Route
-										element={
-											<Authenticated
-												key="authenticated-outer"
-												fallback={<Outlet />}
-											>
-												<NavigateToResource resource="tasks" />
-											</Authenticated>
-										}
-									>
-										<Route path="/login" element={<Login />} />
-									</Route>
-								</Routes>
-								<RefineKbar />
-								<UnsavedChangesNotifier />
-								<DocumentTitleHandler />
-							</Refine>
-							<DevtoolsPanel />
-						</DevtoolsProvider>
-					</RefineSnackbarProvider>
-				</ColorModeContextProvider>
-			</RefineKbarProvider>
+								},
+							]}
+							options={{
+								syncWithLocation: false,
+								warnWhenUnsavedChanges: true,
+								projectId: "6mdJ1i-c37dju-qI5aFP",
+								title: { text: "Refine Project", icon: <AppIcon /> },
+							}}
+						>
+							<Routes>
+								<Route
+									element={
+										<Authenticated
+											key="authenticated-inner"
+											fallback={<CatchAllNavigate to="/login" />}
+										>
+											<ThemedLayout Header={Header}>
+												<Outlet />
+											</ThemedLayout>
+										</Authenticated>
+									}
+								>
+									<Route path="/tasks/show/:id" element={<TaskShow />} />
+									<Route path="/tasks/edit/:id" element={<TaskEdit />} />
+									<Route path="/tasks/create" element={<TaskCreate />} />
+									<Route path="/tasks" element={<TaskList />} />
+									<Route path="/" element={<NavigateToResource resource="tasks" />} />
+									<Route path="*" element={<ErrorComponent />} />
+								</Route>
+								<Route path="/login" element={<Login />} />
+							</Routes>
+							<RefineKbar />
+							<UnsavedChangesNotifier />
+							<DocumentTitleHandler />
+						</Refine>
+						<DevtoolsPanel />
+					</DevtoolsProvider>
+				</RefineSnackbarProvider>
+			</ColorModeContextProvider>
+		</RefineKbarProvider>
+	);
+}
+
+function App() {
+	return (
+		<BrowserRouter>
+			<AppContent />
 		</BrowserRouter>
 	);
 }

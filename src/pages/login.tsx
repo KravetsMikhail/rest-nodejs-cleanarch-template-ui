@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import { useLogin } from "@refinedev/core";
-import { ThemedTitleV2 } from "@refinedev/mui";
+import { ThemedTitle } from "@refinedev/mui";
 
 export const Login: React.FC = () => {
   const { mutate: login } = useLogin();
@@ -23,7 +23,7 @@ export const Login: React.FC = () => {
         justifyContent="center"
         flexDirection="column"
       >
-        <ThemedTitleV2
+        <ThemedTitle
           collapsed={false}
           wrapperStyles={{
             fontSize: "22px",
