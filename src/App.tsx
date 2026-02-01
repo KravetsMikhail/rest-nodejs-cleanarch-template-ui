@@ -28,13 +28,11 @@ import { BrowserRouter, Outlet, Route, Routes, useLocation } from "react-router"
 import { AppIcon } from "./components/app-icon";
 import { Header } from "./components/header";
 import { ColorModeContextProvider } from "./contexts/color-mode";
-import {
-	TaskCreate,
-	TaskEdit,
-	TaskList,
-	TaskShow,
-} from "./pages/tasks";
-import { Login } from "./pages/login";
+import { TaskList } from "./pages/tasks/list";
+import { TaskCreate } from "./pages/tasks/create";
+import { TaskEdit } from "./pages/tasks/edit";
+import { TaskShow } from "./pages/tasks/show";
+import { Dashboard } from "./pages/dashboard";
 import { authProvider } from "./providers/auth-provider";
 
 function AppContent() {
@@ -95,11 +93,13 @@ function AppContent() {
 							resources={[
 								{
 									name: "tasks",
+									identifier: "tasks",
 									list: "/tasks",
 									create: "/tasks/create",
 									edit: "/tasks/edit/:id",
 									show: "/tasks/show/:id",
 									meta: {
+										label: "Tasks",
 										canDelete: true,
 									},
 								},
@@ -124,14 +124,13 @@ function AppContent() {
 										</Authenticated>
 									}
 								>
+									<Route path="/" element={<Dashboard />} />
 									<Route path="/tasks/show/:id" element={<TaskShow />} />
 									<Route path="/tasks/edit/:id" element={<TaskEdit />} />
 									<Route path="/tasks/create" element={<TaskCreate />} />
 									<Route path="/tasks" element={<TaskList />} />
-									<Route path="/" element={<NavigateToResource resource="tasks" />} />
 									<Route path="*" element={<ErrorComponent />} />
 								</Route>
-								<Route path="/login" element={<Login />} />
 							</Routes>
 							<RefineKbar />
 							<UnsavedChangesNotifier />
