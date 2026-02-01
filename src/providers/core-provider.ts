@@ -41,9 +41,32 @@ export const coreDataProvider = (
 		const { headers, method } = meta ?? {};
 		const requestMethod = (method as MethodTypesWithBody) ?? "put";
 
-		const { data } = await httpClient[requestMethod](url, variables, {
+		// Remove search field (backend generates it) and convert projectId to string if present
+		const { search, ...variablesWithoutSearch } = variables as any;
+		const processedVariables: any = {
+			...variablesWithoutSearch,
+		};
+		
+		// Only add projectId if it's not empty
+		if (variablesWithoutSearch.projectId && variablesWithoutSearch.projectId.trim() !== '') {
+			processedVariables.projectId = String(variablesWithoutSearch.projectId);
+		}
+
+		console.log('Updating task:', { url, processedVariables });
+		console.log('Request headers:', headers);
+		console.log('Request method:', requestMethod);
+		
+		// Log all available headers from httpClient
+		console.log('HttpClient defaults:', httpClient.defaults);
+		if (httpClient.defaults.headers) {
+			console.log('Default headers:', httpClient.defaults.headers);
+		}
+
+		const { data } = await httpClient[requestMethod](url, processedVariables, {
 			headers,
 		});
+
+		console.log('Task updated successfully:', data);
 
 		return {
 			data,
@@ -59,12 +82,35 @@ export const coreDataProvider = (
 		const { headers, method } = meta ?? {};
 		const requestMethod = (method as MethodTypesWithBody) ?? "post";
 
-		const { data } = await httpClient[requestMethod](url, variables, {
+		// Remove search field ( backend generates it) and convert projectId to string if present
+		const { search, ...variablesWithoutSearch } = variables as any;
+		const processedVariables: any = {
+			...variablesWithoutSearch,
+		};
+		
+		// Only add projectId if it's not empty
+		if (variablesWithoutSearch.projectId && variablesWithoutSearch.projectId.trim() !== '') {
+			processedVariables.projectId = String(variablesWithoutSearch.projectId);
+		} else {
+			// Explicitly delete projectId to ensure it's not sent
+			delete processedVariables.projectId;
+		}
+		
+		console.log('Original variables:', variables);
+		console.log('Variables without search:', variablesWithoutSearch);
+		console.log('Processed variables:', processedVariables);
+
+		const response = await httpClient[requestMethod](url, processedVariables, {
 			headers,
 		});
 
+		console.log('Full response:', response);
+		console.log('Response status:', response.status);
+		console.log('Response data:', response.data);
+		console.log('Response headers:', response.headers);
+
 		return {
-			data,
+			data: response.data,
 		};
 	},
 
@@ -93,6 +139,8 @@ export const coreDataProvider = (
 		const { headers: headersFromMeta, method } = meta ?? {};
 		const requestMethod = (method as MethodTypes) ?? "get";
 	
+		console.log('Getting tasks list from:', url);
+	
 		// init query object for pagination and sorting
 		const query: {
 			offset?: number;
@@ -117,24 +165,28 @@ export const coreDataProvider = (
 
 		const queryFilters = generateFilter(filters);
 
-		const { data, headers } = await httpClient[requestMethod](
-			`${url}?${stringify(query)}&${stringify(queryFilters)}`,
-			{
-				headers: headersFromMeta,
-			},
-		).catch((err) => {
+		try {
+			const { data, headers } = await httpClient[requestMethod](
+				`${url}?${stringify(query)}&${stringify(queryFilters)}`,
+				{
+					headers: headersFromMeta,
+				},
+			);
+			console.log('Tasks list loaded:', data);
+			const total = +headers["x-total-count"];
+
+			return {
+				data,
+				total: total || data.length,
+			};
+		} catch (err: any) {
+			console.error('Error loading tasks list:', err);
 			throw Object.assign(new Error(), {
 				...err,
 				message: err.response?.data?.message,
 				statusCode: err.response?.status,
 			});
-		});
-		const total = +headers["x-total-count"];
-
-		return {
-			data,
-			total: total || data.length,
-		};
+		}
 	},
 
 	getApiUrl: () => apiUrl,
